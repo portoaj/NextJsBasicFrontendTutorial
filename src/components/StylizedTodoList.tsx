@@ -17,6 +17,7 @@ export default function StylizedTodoList({ defaultTodos }: StylizedTodoListProps
     
     return (
         <div className="max-w-md mt-8 p-4 bg-white shadow-md rounded-lg">
+            {/*Loop over the todos and render each one*/}
             {Object.keys(todos).map((title, i) => {
                 const isChecked = todos[title];
 
