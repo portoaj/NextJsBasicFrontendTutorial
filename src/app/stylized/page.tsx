@@ -2,7 +2,7 @@ import StylizedTodoList from "@/components/StylizedTodoList"
 
 export default function StylizedTodoListPage() {
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
+        <div className="min-h-screen bg-gray-100 items-center p-6">
             <div className="max-w-3xl w-full bg-white shadow-md rounded-lg p-6">
                 <h1 className="text-center text-3xl font-bold mb-8 text-gray-800">Stylized Todo</h1>
                 <StylizedTodoList defaultTodos={{ "Learn React": true, "Learn TypeScript": true, "Learn Next.js": false, "Learn Frontend": true }} />
