@@ -2,7 +2,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Once you've downloaded/ cloned the project to your machine open it up your IDE of choice, we recommend VSCode. Make sure you have a recent version of Node.js installed on your machine. You can download it [here](https://nodejs.org/en/) or even better use a tool like [nvm](https://github.com/nvm-sh/nvm) to manage different versions of node for different projects.
+
+To install the project dependencies, run:
+
+```bash
+npm install
+```
+
+Then you can run the development server:
 
 ```bash
 npm run dev
@@ -16,7 +24,7 @@ Navigate to [http://localhost:3000/basic](http://localhost:3000/basic) to see th
 There are two blocks of code that are relevant. The first block is the code for the actual page, this is located at src\app\basic\page.tsx.
 The second block is the code for the BasicTodoList component referenced in the page, this is located at src\components\BasicTodoList.tsx.
 
-Lets start with the page code:
+Lets start with the page code for a simple Todo list:
 ```tsx
 import BasicTodoList from "@/components/BasicTodoList";
 
@@ -166,7 +174,7 @@ export default function StylizedTodoList({ defaultTodos }: StylizedTodoListProps
 At the top of this file, you'll notice the line "use client". This is a special comment that tells the compiler that this component should be rendered on the client side only, and not the server. This means that we can use things like window and document that only appear in the browswer in this component. In particular, we need it to use OnClick events.
 
 ### React State Management
-This component uses React's useState hook to manage the state of the todo list. It returns a variable called todos that holds the state of the current todos, as well as a setTodos function to update that state which is used by the toggleTodo helper function. Notice that the defaultTodos prop is passed in as the initial state and that the type is specified using <>.
+This component uses React's useState hook to manage the state of the todo list. It returns a variable called todos that holds the state of the current todos, as well as a setTodos function to update that state which is used by the toggleTodo helper function. Notice that the defaultTodos prop is passed in as the initial state and that the type is specified within <>.
 
 ### TSX and TailwindCSS
 The div wrapping the todo list items is styled similarly to the page container, with classes that create a card-like appearance. Each todo item is rendered inside a div with flexbox layout for alignment.
@@ -178,3 +186,59 @@ The label element dynamically changes its styling based on whether the todo item
 
 ### Interactive Behavior
 The checkbox's onClick event triggers the toggleTodo function, which updates the state of the todos object. Whenever the todos object is changed, the body of the component gets rerendered since the state has changed. The label element's text and style change based on this state.
+
+## Creating the layout
+
+You might notice that all of the pages have a header and a footer. This layout comes from src/app/layout.tsx. This file has a layout that gets applied to all of the child pages. This is a pretty common and important pattern.
+
+Here's the code for the layout:
+```tsx
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Link from "next/link";
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "To-Do List",
+  description: "A simple and elegant to-do list application",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={`${inter.className} text-gray-900`}>
+        <div className="min-h-screen flex flex-col">
+          <header className="w-full py-4 bg-blue-500 text-white flex justify-between items-center px-6">
+            <div className="flex items-center">
+              <nav>
+                <Link href="/" className="flex text-center">
+                  {/* Example logo */}
+                  <div className="w-10 h-10 bg-white rounded-full"></div>{" "}
+                  <h1 className="ml-4 text-xl font-bold">My To-Do List</h1>
+                </Link>
+              </nav>
+            </div>
+          </header>
+          <main className="flex-1 w-full max-w-3xl mx-auto bg-white rounded-lg">
+            {children}
+          </main>
+          <footer className="w-full py-4 bg-gray-800 text-white text-center">
+            <p>&copy; 2024 Basic To-Do List App - UCSD CSES</p>
+          </footer>
+        </div>
+      </body>
+    </html>
+  );
+}
+```
+
+### Nested Components
+Most of the code in this layout should be pretty recognizable by now with the possible exception of some of the HTML elements like header, nav and footer. Most of these tags don't actually affect the visuals of the webpage but help to organize the code and also help screen readers for people with accessibility issues.
+
+The interesting thing in this example is the use of a generic nested component, in this case called children. As you can see it's passed into the RootLayout component as a prop and then rendered in the main tag. This is a common pattern in React where you can pass in a component as a prop and then render it within the component by wrapping the component prop in curly brackets ({}). This is a powerful pattern that allows you to create reusable components that can be customized by passing in other components as props.
